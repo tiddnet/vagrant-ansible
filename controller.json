@@ -21,6 +21,7 @@
 	{
       "type": "shell",
       "scripts": [ 
+        "scripts/set-private-keys.sh",
         "scripts/update-git.sh"
       ],
       "start_retry_timeout": "5m",
