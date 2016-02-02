@@ -78,8 +78,16 @@ Vagrant.configure(2) do |config|
  	controller_config.vm.provision :host_shell do |host_shell|
       host_shell.inline = "[ -f ${HOME}/.ssh/id_rsa ] && cp -f ${HOME}/.ssh/id_rsa* ./personal-data/"
     end
- 	controller_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"	
- 		
+ 	controller_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"
+
+	# Here we are setting up ssh passwordless communication with clients. 
+    controller_config.vm.provision "shell", path: "scripts/setup-ansible-controller-ssh-keys.sh"		
+ 	
+    # for some reason I have to restart network, but this needs more investigation 
+    controller_config.vm.provision "shell" do |remote_shell|
+      remote_shell.inline = "systemctl restart network"
+    end
+	
  	# this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up". 
  	controller_config.vm.provision :host_shell do |host_shell|
       host_shell.inline = 'vagrant snapshot take controller baseline'
@@ -103,11 +111,14 @@ Vagrant.configure(2) do |config|
         vb.name = "ansibleclient0#{i}"    
       end
 
-      # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up". 
+      # for some reason I have to restart network, but this needs more investigation 
       ansibleclient_config.vm.provision "shell" do |remote_shell|
         remote_shell.inline = "systemctl restart network"
       end
       
+	  # Here we are setting up ssh passwordless communication when connection request recieved by the controller. 	  
+	  ansibleclient_config.vm.provision "shell", path: "scripts/setup-ansible-client-ssh-keys.sh"
+	  
       # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up". 
       ansibleclient_config.vm.provision :host_shell do |host_shell|
         host_shell.inline = "vagrant snapshot take ansibleclient0#{i} baseline"

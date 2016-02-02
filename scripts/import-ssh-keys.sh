@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 runuser -l vagrant -c "cp -f /vagrant/personal-data/id_rsa* ~/.ssh"
 chmod 700 /home/vagrant/.ssh/id_rsa
