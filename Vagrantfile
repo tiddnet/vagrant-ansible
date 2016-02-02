@@ -92,7 +92,7 @@ Vagrant.configure(2) do |config|
   ##  
   (1..2).each do |i|  
     config.vm.define "ansibleclient0#{i}" do |ansibleclient_config|
-      ansibleclient_config.vm.box = "agent.box"
+      ansibleclient_config.vm.box = "client.box"
       ansibleclient_config.vm.hostname = "ansibleclient0#{i}.local"  
       ansibleclient_config.vm.network "private_network", ip: "192.168.50.10#{i}"  
       ansibleclient_config.vm.provider "virtualbox" do |vb|
@@ -101,6 +101,11 @@ Vagrant.configure(2) do |config|
         vb.cpus = 1
         vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
         vb.name = "ansibleclient0#{i}"    
+      end
+
+      # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up". 
+      ansibleclient_config.vm.provision "shell" do |remote_shell|
+        remote_shell.inline = "systemctl restart network"
       end
       
       # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up". 

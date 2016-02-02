@@ -7,7 +7,7 @@ git checkout tags/v2.0.0.1-1
 
 source ./hacking/env-setup    # I think this needs to be added in the bashrc profile file. 
 
-echo "source /root/ansible/hacking/env-setup 1>/dev/null 2>&1" >> /root/.bashrc
+echo "source /home/vagrant/ansible/hacking/env-setup 1>/dev/null 2>&1" >> /home/vagrant/.bashrc
 
 easy_install pip
 
