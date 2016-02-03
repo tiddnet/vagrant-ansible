@@ -1,4 +1,44 @@
-vagrant-foreman
+vagrant-ansible
+
+### Overview
+
+This is a combined packer+vagrant project. The packer side outputs .box files which are then fed into the vagrant code. The vagrant project is a 3 Centos 7 vm development environment, i.e.:  
+
+```
+$ vagrant status
+Current machine states:
+
+controller                not created (virtualbox)
+ansibleclient01           not created (virtualbox)
+ansibleclient02           not created (virtualbox)
+
+This environment represents multiple VMs. The VMs are all listed
+above with their current state. For more information about a specific
+VM, run `vagrant status NAME`.
+```
+
+Here we have the controller vm, this has the free version of ansible installed. ansibleclient01 and ansibleclient02 are just Centos 7 installs. 
+
+On the controller server, we have as user called "ansible":
+
+```
+[root@controller ~]# cat /etc/passwd | grep ansible
+ansible:x:1001:1001::/home/ansible:/bin/bash
+```
+
+
+The environmeent is set up so that this "ansible" user can run ansible commands:
+
+```
+[ansible@controller ~]$ ansible --version
+ansible 2.1.0 (devel 5cd3f71792) last updated 2016/02/02 22:03:51 (GMT +100)
+  lib/ansible/modules/core: (detached HEAD 93d02189f6) last updated 2016/02/02 22:04:02 (GMT +100)
+  lib/ansible/modules/extras: (detached HEAD fff5ae6994) last updated 2016/02/02 22:04:12 (GMT +100)
+  config file =
+  configured module search path = Default w/o overrides
+``` 
+
+Also notice that in this vagrant development environment, the version of ansible is v2.1.0.  
 
 
 ### Pre-reqs
@@ -9,7 +49,6 @@ you need to have the following installed on your host machine:
 * [packer](https://www.packer.io/)
 * [vagrant](https://www.vagrantup.com/)
 * [git-bash](https://msysgit.github.io/)
-* google chrome
 
 Once they are all installed, do the following:
 
@@ -75,32 +114,25 @@ Start a git-bash terminal
 cd into the project folder and run the following to create the 2 ".box"" files
 
 ```sh
-$ packer build master.json
-$ packer build agent.json
-$ packer build agent6.json     # useful if you want to build linux 6 puppet agent. 
+$ packer build controller.json
+$ packer build client.json
 ```
-Each of the above commands will take about 40 minutes to complete, but depends on your machine specs and internet connections. 
+Each of the above commands will take about 20 minutes to complete, but depends on your machine specs and internet connections. 
 
 The Run the following:
 
 ```sh
-$ vagrant up puppetmaster
+$ vagrant up controller
 ``` 
 
-Next, you have a choice linux 6 and linux 7 puppet agents that you can start up. The following are Linux 7 machines:
+There are also 2 ansible CentOS 7 clients that you can start up:
 
 
 ```sh
-$ vagrant up puppetagent01
-$ vagrant up puppetagent02
+$ vagrant up ansibleclient01
+$ vagrant up ansibleclient01
 ``` 
 
-And here are the Linux 6 machines:
-
-```sh
-$ vagrant up puppetagent05
-$ vagrant up puppetagent06
-``` 
 
 
 ### Set up local rerouting if you are running vagrant on windows machine
@@ -108,11 +140,9 @@ $ vagrant up puppetagent06
 Enter this in the windows hosts file (C:\Windows\System32\drivers\etc\hosts):
 
 ```
-192.168.50.10   puppetmaster puppetmaster.local
-192.168.50.11   puppetagent01 puppetagent01.local
-192.168.50.12   puppetagent02 puppetagent02.local
-192.168.50.15   puppetagent05 puppetagent05.local
-192.168.50.16   puppetagent06 puppetagent06.local
+192.168.50.100   controller controller.local
+192.168.50.101   ansibleclient01 ansibleclient01.local
+192.168.50.102   ansibleclient01 ansibleclient01.local
 ```
 
 ### Login credentials
@@ -130,14 +160,15 @@ username: root
 password: vagrant
 ```
 
-You can also open up your foreman server by going to https://puppetmaster.local/  (open this in google chrome)
-
-The admin login credentials to login in via the foreman web gui console is:
+However if you want to log into the controller in order to trigger ansible runs, then you need to ssh into the Controller as the "ansible" user:
 
 ```
-username: admin 
-password: password
+username: ansible 
+password: vagrant
 ```
+
+
+
 
 
 ### Auto snapshots
@@ -148,13 +179,13 @@ On accasions you'll want to reset your vagrant boxes. This is usually done by do
 For each vm, a virtualbox is taken towards the end of your "vagrant up". This snapshot is called "baseline". If you want to roll back to this snapshot, then you do:
 
 ```
-vagrant snapshot go puppetmaster baseline
+vagrant snapshot go controller baseline
 ```
 
-...or for a puppetagent, e.g. puppetagent01, you do:
+...or for an ansible client, e.g. ansibleclient01, you do:
 
 ```
-vagrant snapshot go puppetagent01 baseline
+vagrant snapshot go ansibleclient01 baseline
 ```
 
 
@@ -168,7 +199,5 @@ vagrant box list
 vagrant box remove {box name}
 ```
 
-Then delete the 2 .box files, or in fact the entire vagrant project then do a git clone again.  
-
-
+Then delete the 2 .box files, or in fact delete the entire vagrant project then do a git clone again.  
 

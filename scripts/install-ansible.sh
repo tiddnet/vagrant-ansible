@@ -1,7 +1,7 @@
 #!/bin/bash
 
 useradd ansible
-
+echo "vagrant" | passwd --stdin ansible
 
 runuser -l ansible -c 'git clone git://github.com/ansible/ansible.git --recursive'  
 
