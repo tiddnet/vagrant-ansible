@@ -160,13 +160,7 @@ username: root
 password: vagrant
 ```
 
-However if you want to log into the controller in order to trigger ansible runs, then you need to ssh into the Controller as the "ansible" user:
-
-```
-username: ansible 
-password: vagrant
-```
-
+If you want to trigger ansible runs, you need to log in as the root user. 
 
 
 
