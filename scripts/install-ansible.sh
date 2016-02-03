@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# http://docs.ansible.com/ansible/intro_installation.html#latest-release-via-yum
 echo "INFO: About to run scripts/install-ansible.sh"
 yum install python-devel -y  || exit 1     # this package is in the "base" yum repo
 yum install python2-crypto -y  || exit 1
