@@ -14,14 +14,6 @@ runuser -l ansible -c 'source ./hacking/env-setup '
 runuser -l ansible -c 'echo "source /home/ansible/ansible/hacking/env-setup 1>/dev/null 2>&1" >> /home/ansible/.bashrc'
 
 
-
-
-
-
-
- 
-
-
 easy_install pip
 
 yum install python-devel -y     # this package is in the "base" yum repo
