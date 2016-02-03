@@ -142,7 +142,7 @@ Enter this in the windows hosts file (C:\Windows\System32\drivers\etc\hosts):
 ```
 192.168.50.100   controller controller.local
 192.168.50.101   ansibleclient01 ansibleclient01.local
-192.168.50.102   ansibleclient01 ansibleclient01.local
+192.168.50.102   ansibleclient02 ansibleclient02.local
 ```
 
 ### Login credentials
