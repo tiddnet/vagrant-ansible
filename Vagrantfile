@@ -82,6 +82,12 @@ Vagrant.configure(2) do |config|
 
 	# Here we are setting up ssh passwordless communication with clients. 
     controller_config.vm.provision "shell", path: "scripts/setup-ansible-controller-ssh-keys.sh"		
+
+
+	# Here we are telling the controller what clients it is allowed to control. 
+    controller_config.vm.provision "shell", path: "scripts/populate-ansible-inventory.sh"		
+
+
  	
     # for some reason I have to restart network, but this needs more investigation 
     controller_config.vm.provision "shell" do |remote_shell|
@@ -95,6 +101,11 @@ Vagrant.configure(2) do |config|
 	
   end
 
+  
+  
+  
+  
+  
   ##
   ## Ansible Clients - linux 7 boxes
   ##  
