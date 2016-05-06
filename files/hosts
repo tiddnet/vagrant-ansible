@@ -9,11 +9,14 @@
 #   - A hostname/ip can be a member of multiple groups
 
 # Ex 1: Ungrouped hosts, specify before any group headers.
-
+controller.local
 ansibleclient01.local
 ansibleclient02.local
 
 # Ex 2: A collection of hosts belonging to the 'clients' group
+[local]
+controller.local
+
 
 [clients]
 ansibleclient01.local
