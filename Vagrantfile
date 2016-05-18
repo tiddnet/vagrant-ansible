@@ -44,12 +44,6 @@ Vagrant.configure(2) do |config|
 	    # adding a second hdd to my vm.
 	    # https://gist.github.com/leifg/4713995
 
-      #   docker_storage = './tmp/docker.vdi'
-	    #   unless File.exist?(docker_storage)
-      #     vb.customize ['createhd', '--filename', docker_storage, '--size', 50 * 1024]     # This is 50GB,
-      #   end
-      #   vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', docker_storage]
-
 	    # However for more obscure virtualbox specific settings we fall back to virtualbox's "modifyvm" command:
 	    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
 
@@ -63,7 +57,7 @@ Vagrant.configure(2) do |config|
     #    end
     #	controller_config.vm.provision "shell", path: "scripts/copy-GitServerCertificates-into-vm.sh"
     #	controller_config.vm.provision "shell", path: "docker/install-docker.sh"
-    controller_config.vm.provision "shell", path: "scripts/install-stable-ansible.sh"
+    controller_config.vm.provision "shell", path: "scripts/install-ansible-tower.sh"
 
 	  # Copy the .gitconfig file from the host machine to the guest machine
  	  controller_config.vm.provision :host_shell do |host_shell|
